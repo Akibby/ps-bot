@@ -23,7 +23,7 @@ class MyClient(discord.Client):
 
   @tasks.loop(seconds=60) # task runs every 60 seconds
   async def my_background_task(self):
-    channel = self.get_channel(TEST_CHANNEL_KEY) # channel ID goes here
+    channel = self.get_channel(CHANNEL_KEY) # channel ID goes here
     instock = False
     for store in self.stores:
       if store.checkStock():
