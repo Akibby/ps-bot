@@ -12,8 +12,12 @@ class MyClient(discord.Client):
     self.stores = [StockCheck('https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'), 
                     StockCheck('https://www.bestbuy.com/site/sony-playstation-5-digital-edition-console/6430161.p?skuId=6430161'), 
                     StockCheck('https://www.gamestop.com/video-games/playstation-5/consoles/products/playstation-5-digital-edition/11108141.html'), 
-                    StockCheck('https://www.gamestop.com/video-games/playstation-5/consoles/products/playstation-5/11108140.html')]
+                    StockCheck('https://www.gamestop.com/video-games/playstation-5/consoles/products/playstation-5/11108140.html'),
+                    StockCheck('https://www.gamestop.com/video-games/xbox-series-x/consoles/products/xbox-series-x/B224744V.html'),
+                    StockCheck('https://www.bestbuy.com/site/microsoft-xbox-series-x-1tb-console-black/6428324.p?skuId=6428324')]
     self.role = ROLE_KEY
+    self.counter = 0
+    self.instock = False
     # start the task to run in the background
     self.my_background_task.start()
 
@@ -27,10 +31,14 @@ class MyClient(discord.Client):
     instock = False
     for store in self.stores:
       if store.checkStock():
-        instock = True
+        self.instock = True
         await channel.send(f"{self.role} Item in stock at {store.getUrl()}")
-    if not instock:
-      await channel.send(f"Item not in stock")
+    if self.counter == 1440:
+      self.counter = 0
+      if not self.instock:
+        await channel.send(f"No stock in the last 24 hours")
+      else:
+        self.instock = False
 
   @my_background_task.before_loop
   async def before_my_task(self):
