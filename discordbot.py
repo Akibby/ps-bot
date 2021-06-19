@@ -39,6 +39,8 @@ class MyClient(discord.Client):
         await channel.send(f"No stock in the last 24 hours")
       else:
         self.instock = False
+    else:
+      self.counter+=1
 
   @my_background_task.before_loop
   async def before_my_task(self):
