@@ -20,8 +20,10 @@ class StockCheck():
     divs = noStarchSoup.select('div')
 
     if 'sold out' in str(buttons).lower() or 'not available' in str(buttons).lower():
+      print(f"{time.ctime()} Out of stock at {self.url}")
       return False
     else:
+      print(f"{time.ctime()} Stock available at {self.url}")
       return True
 
   def getUrl(self):
