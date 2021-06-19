@@ -21,9 +21,15 @@ class StockCheck():
 
     if 'sold out' in str(buttons).lower() or 'not available' in str(buttons).lower():
       print(f"{time.ctime()} Out of stock at {self.url}")
+      f = open("log", "a")
+      f.write(f"{time.ctime()} Out of stock at {self.url}\n")
+      f.close()
       return False
     else:
-      print(f"{time.ctime()} Stock available at {self.url}")
+      print(f"{time.ctime()} Stock available at {self.url}\n")
+      f = open("log", "a")
+      f.write(f"{time.ctime()} Stock available at {self.url}\n")
+      f.close()
       return True
 
   def getUrl(self):

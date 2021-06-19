@@ -24,6 +24,9 @@ class MyClient(discord.Client):
   async def on_ready(self):
     print(f'Logged in as {self.user} (ID: {self.user.id})')
     print('------')
+    f = open("log", "w")
+    f.write(f'Logged in as {self.user} (ID: {self.user.id})\n')
+    f.close()
 
   @tasks.loop(seconds=60) # task runs every 60 seconds
   async def my_background_task(self):
