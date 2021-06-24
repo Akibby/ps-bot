@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 from discord.ext import tasks
 from stockcheck import StockCheck
-from secrets import BOT_KEY, CHANNEL_KEY, ROLE_KEY, TEST_CHANNEL_KEY
+from secrets import BOT_KEY, CHANNEL_KEY, XBOX_ROLE_KEY, PS4_ROLE_KEY, TEST_CHANNEL_KEY
 
 import discord
 
@@ -15,7 +15,8 @@ class MyClient(discord.Client):
                     StockCheck('https://www.gamestop.com/video-games/playstation-5/consoles/products/playstation-5/11108140.html'),
                     StockCheck('https://www.gamestop.com/video-games/xbox-series-x/consoles/products/xbox-series-x/B224744V.html'),
                     StockCheck('https://www.bestbuy.com/site/microsoft-xbox-series-x-1tb-console-black/6428324.p?skuId=6428324')]
-    self.role = ROLE_KEY
+    self.psrole = PS4_ROLE_KEY
+    self.xbrole = XBOX_ROLE_KEY
     self.counter = 0
     self.instock = False
     # start the task to run in the background
@@ -35,7 +36,12 @@ class MyClient(discord.Client):
     for store in self.stores:
       if store.checkStock():
         self.instock = True
-        await channel.send(f"{self.role} Item in stock at {store.getUrl()}")
+        if "playstation" in store.getUrl():
+          await channel.send(f"{self.psrole} Item in stock at {store.getUrl()}")
+        elif "xbox" in store.getUrl():
+          await channel.send(f"{self.xbrole} Item in stock at {store.getUrl()}")
+        else:
+          await channel.send(f"{self.xbrole} {self.psrole} Item in stock at {store.getUrl()}")
     if self.counter == 1440:
       self.counter = 0
       if not self.instock:
